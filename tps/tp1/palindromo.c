@@ -28,7 +28,7 @@ void getstring(char palavra[], int maxSize)
 {
     fgets(palavra, maxSize, stdin);
 
-    
+    //Remove espaço em branco da string para nao ocorrer erros na comparação
     size_t tamanho = strlen(palavra);
     if (tamanho > 0 && palavra[tamanho - 1] == '\n') {
         palavra[tamanho - 1] = '\0';
