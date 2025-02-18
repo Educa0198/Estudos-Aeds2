@@ -11,13 +11,19 @@ int main()
     char palavra[50];
     getstring(palavra, sizeof(palavra));
 
-    if(ehPalindromo(palavra))
+    // Corrected condition to exit loop when "FIM" is entered
+    while (strcmp(palavra, "FIM") != 0)
     {
-        printf("SIM\n");
-    }
-    else
-    {
-        printf("NAO\n");
+        if (ehPalindromo(palavra))
+        {
+            printf("SIM\n");
+        }
+        else
+        {
+            printf("NAO\n");
+        }
+
+        getstring(palavra, sizeof(palavra));
     }
 
     return 0;
@@ -28,25 +34,24 @@ void getstring(char palavra[], int maxSize)
 {
     fgets(palavra, maxSize, stdin);
 
-    //Remove espaço em branco da string para nao ocorrer erros na comparação
+    // Remove espaço em branco da string para nao ocorrer erros na comparação
     size_t tamanho = strlen(palavra);
     if (tamanho > 0 && palavra[tamanho - 1] == '\n') {
         palavra[tamanho - 1] = '\0';
     }
 }
 
-
-//Confere se eh palindromo ou nao e retorna um bool dependendo do caso.
+// Confere se eh palindromo ou nao e retorna um bool dependendo do caso.
 bool ehPalindromo(char palavra[])
 {
     int tamanho = strlen(palavra);
 
-    for(int i = 0; i < tamanho / 2; i++) 
+    for (int i = 0; i < tamanho / 2; i++)
     {
-        if(palavra[i] != palavra[tamanho - i - 1]) 
+        if (palavra[i] != palavra[tamanho - i - 1])
         {
-            return false; 
+            return false; // Não é um palíndromo
         }
     }
-    return true; 
+    return true; // É um palíndromo
 }

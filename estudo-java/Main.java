@@ -31,6 +31,7 @@ public class Main {
          name = name.trim();
          name = name.replace("i", "o");
          System.out.printf("%s\n", name);
+        
          sc.close();
          
      }
