@@ -1,46 +1,35 @@
-  import java.util.Scanner;
-  
+import java.util.Scanner;
 
-     public class palindromo{
+public class palindromo {
+    public static void main(String[] args) {
         Scanner sc = new Scanner(System.in);
-
-        public static void main(String[] args)
-        {
-            while (getPalavra() != "FIM") {
-                
-            
-            if (ehPalindromo(getPalavra()))
-            {
-                System.out.printf("SIM\n");
-            }
-            else
-            System.out.printf("NAO\n");
-        }
-        }
-
-        String getPalavra()
-        {
-            String palavra = sc.nextLine();
-            return palavra;
-        }
-
-
-        boolean ehPalindromo(String palavra)
-        {
-            
-            int tamanho = palavra.length() - 1;
-            
-            for(int i =0; i < tamanho/2 ; i++)
-            {
-                if (palavra.charAt(0 ) != palavra.charAt(tamanho - i))
-                {
-                    return false; // Não é um palíndromo
-                }
-            }
+        String palavra = sc.nextLine();
         
-            return true;
+        //a cada iteracao, compara se a palavra digitada foi fim, se nao, checa se eh um palindromo.
+        while (!palavra.equals("FIM")) {
+            
+            // se retornar true, printa sim, se nao for, printa nao.
+            if (ehPalindromo(palavra)) {
+                System.out.println("SIM");
+            } else {
+                System.out.println("NAO");
+            }
+            palavra = sc.nextLine();
         }
 
+        sc.close();
+    }
 
 
-     }
+    //compara para descobrir se eh um palindromo.
+    public static boolean ehPalindromo(String palavra) {
+        int tamanho = palavra.length();
+        for (int i = 0; i < tamanho / 2; i++) {
+            if (palavra.charAt(i) != palavra.charAt(tamanho - 1 - i)) {
+                return false; 
+            }
+        }
+        
+        return true;
+    }
+}
