@@ -1,6 +1,6 @@
 import java.util.Scanner;
 
-public class AlgebraBooleana {
+public class AlgebraRecursivo {
     
     public static void main(String[] args) {
         Scanner sc = new Scanner(System.in);

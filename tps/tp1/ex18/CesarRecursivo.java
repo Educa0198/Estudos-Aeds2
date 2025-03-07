@@ -21,9 +21,10 @@ public class CesarRecursivo {
             return palavraNova;
         }
         char letra = (char) (palavra.charAt(index) + 3);
-        if (letra > 125) {
-            letra = (char) 65533;
-        }
+        if((palavra.charAt(index) + 3) > 125 ) //confere se a letra tem valor maior que # na tabela ASCII, se sim, altera o caracter para o caracter de valor invalido usado no verde
+                {
+                    letra = (char) 65533;
+                }
         palavraNova.append(letra);
         return cifrar(palavra, index + 1, palavraNova);
     }
