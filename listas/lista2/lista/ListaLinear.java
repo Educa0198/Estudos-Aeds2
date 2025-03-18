@@ -1,3 +1,4 @@
+package listas.lista2;
 import java.util.*;
 
 public class ListaLinear {
@@ -102,7 +103,7 @@ public class ListaLinear {
 
     public boolean pesquisar(int elem)
     {
-        boolean match = false;
+        
         for(int i = 0 ; i < n; i++)
         {
             if(array[i] == elem)
@@ -112,6 +113,17 @@ public class ListaLinear {
         }
         return false;
 
+    }
+
+    public void inverteOrdemIterativo()
+    {
+        int temp;
+        for(int i = 0; i < n/2; i++)
+        {
+            temp = array[i];
+            array[i] = array[n -i -1];
+            array[n-i-1] = temp;
+        }
     }
 
     public static void main(String[] args) {
@@ -131,6 +143,7 @@ public class ListaLinear {
             System.out.println("6 - Remover de posição específica");
             System.out.println("7 - Mostrar lista");
             System.out.println("8 - Pesquisar elemento");
+            System.out.println("9 - Inverter array");
             System.out.println("0 - Sair");
             System.out.print("Escolha uma opção: ");
 
@@ -170,6 +183,10 @@ public class ListaLinear {
                         System.out.print("Digite o elemento a ser pesquisado: ");
                         System.out.println(lista.pesquisar(scanner.nextInt()) ? "Elemento encontrado" : "Elemento não encontrado");
                         break;
+                    case 9:
+                    lista.inverteOrdemIterativo();
+                    System.out.println("Array invertido");
+                    break;
                     case 0:
                         System.out.println("Saindo...");
                         break;
