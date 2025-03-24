@@ -26,7 +26,7 @@ public class Combiner {
             StringBuilder palavranova = new StringBuilder();
             if(tamanho1 < tamanho2)
             {
-                for(int i =0; i < tamanho1; i++)
+                for(int i = 0; i < tamanho1; i++)
                 {
                     palavranova.append(str1.charAt(i));
                     palavranova.append(str2.charAt(i));
@@ -36,7 +36,7 @@ public class Combiner {
                     palavranova.append(str2.charAt(j));
                 }
             }
-            if(tamanho2 < tamanho1)
+            else if(tamanho2 < tamanho1)
             {
                 for(int i = 0; i < tamanho2; i++)
                 {
@@ -48,8 +48,16 @@ public class Combiner {
                     palavranova.append(str1.charAt(j));
                 }
             }
+            else // Corrigindo o erro ao tratar quando os tamanhos são iguais
+            {
+                for(int i = 0; i < tamanho1; i++)
+                {
+                    palavranova.append(str1.charAt(i));
+                    palavranova.append(str2.charAt(i));
+                }
+            }
             System.out.println(palavranova);
         }
-
+        sc.close(); // Fechar Scanner para evitar vazamento de recursos
     }
 }
