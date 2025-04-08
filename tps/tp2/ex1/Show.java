@@ -7,6 +7,7 @@ import java.text.SimpleDateFormat;
 import java.util.Arrays;
 import java.util.Date;
 import java.util.Locale;
+import java.util.Scanner;
 
 public class Show {
     private String showId;
@@ -28,20 +29,20 @@ public class Show {
         this.type = "NaN";
         this.title = "NaN";
         this.director = "NaN";
-        this.cast = new String[]{"NaN"};
+        this.cast = new String[] { "NaN" };
         this.country = "NaN";
         this.dateAdded = null;
         this.releaseYear = 0;
         this.rating = "NaN";
         this.duration = "NaN";
-        this.listedIn = new String[]{"NaN"};
+        this.listedIn = new String[] { "NaN" };
         this.description = "NaN";
     }
 
     // Construtor completo
     public Show(String showId, String type, String title, String director, String[] cast,
-                String country, Date dateAdded, int releaseYear, String rating,
-                String duration, String[] listedIn, String description) {
+            String country, Date dateAdded, int releaseYear, String rating,
+            String duration, String[] listedIn, String description) {
         this.showId = showId;
         this.type = type;
         this.title = title;
@@ -57,18 +58,53 @@ public class Show {
     }
 
     // --- Getters ---
-    public String getShowId() { return showId; }
-    public String getType() { return type; }
-    public String getTitle() { return title; }
-    public String getDirector() { return director; }
-    public String[] getCast() { return cast; }
-    public String getCountry() { return country; }
-    public Date getDateAdded() { return dateAdded; }
-    public int getReleaseYear() { return releaseYear; }
-    public String getRating() { return rating; }
-    public String getDuration() { return duration; }
-    public String[] getListedIn() { return listedIn; }
-    public String getDescription() { return description; }
+    public String getShowId() {
+        return showId;
+    }
+
+    public String getType() {
+        return type;
+    }
+
+    public String getTitle() {
+        return title;
+    }
+
+    public String getDirector() {
+        return director;
+    }
+
+    public String[] getCast() {
+        return cast;
+    }
+
+    public String getCountry() {
+        return country;
+    }
+
+    public Date getDateAdded() {
+        return dateAdded;
+    }
+
+    public int getReleaseYear() {
+        return releaseYear;
+    }
+
+    public String getRating() {
+        return rating;
+    }
+
+    public String getDuration() {
+        return duration;
+    }
+
+    public String[] getListedIn() {
+        return listedIn;
+    }
+
+    public String getDescription() {
+        return description;
+    }
 
     // --- Setters ---
     public void setShowId(String showId) {
@@ -105,7 +141,7 @@ public class Show {
 
     public void setCast(String[] cast) {
         if (cast == null || cast.length == 0) {
-            this.cast = new String[]{"NaN"};
+            this.cast = new String[] { "NaN" };
         } else {
             this.cast = cast;
         }
@@ -153,7 +189,7 @@ public class Show {
 
     public void setListedIn(String[] listedIn) {
         if (listedIn == null || listedIn.length == 0) {
-            this.listedIn = new String[]{"NaN"};
+            this.listedIn = new String[] { "NaN" };
         } else {
             this.listedIn = listedIn;
         }
@@ -171,19 +207,18 @@ public class Show {
     @Override
     public Show clone() {
         return new Show(
-            this.showId,
-            this.type,
-            this.title,
-            this.director,
-            this.cast.clone(),
-            this.country,
-            (this.dateAdded != null ? (Date) this.dateAdded.clone() : null),
-            this.releaseYear,
-            this.rating,
-            this.duration,
-            this.listedIn.clone(),
-            this.description
-        );
+                this.showId,
+                this.type,
+                this.title,
+                this.director,
+                this.cast.clone(),
+                this.country,
+                (this.dateAdded != null ? (Date) this.dateAdded.clone() : null),
+                this.releaseYear,
+                this.rating,
+                this.duration,
+                this.listedIn.clone(),
+                this.description);
     }
 
     // --- Imprimir ---
@@ -192,9 +227,9 @@ public class Show {
         String data = (dateAdded != null) ? sdf.format(dateAdded) : "NaN";
 
         System.out.println("=> " + showId + " ## " + type + " ## " + title + " ## " + director
-            + " ## " + Arrays.toString(cast) + " ## " + country + " ## " + data
-            + " ## " + releaseYear + " ## " + rating + " ## " + duration
-            + " ## " + Arrays.toString(listedIn) + " ## " + description);
+                + " ## " + Arrays.toString(cast) + " ## " + country + " ## " + data
+                + " ## " + releaseYear + " ## " + rating + " ## " + duration
+                + " ## " + Arrays.toString(listedIn) + " ## " + description);
     }
 
     // --- Ler ---
@@ -285,24 +320,44 @@ public class Show {
 
     public static void main(String[] args) {
         String arquivo = "/home/educa/Desktop/Github/Estudos-Aeds2/tps/tp2/disneyplus.csv";
+        Scanner sc = new Scanner(System.in);
+        String escolherLinha = sc.nextLine();
 
-        try (BufferedReader br = new BufferedReader(new FileReader(arquivo))) {
-            String linha;
-            boolean pularCabecalho = true;
+        while (!escolherLinha.equals("FIM")) {
+            // Extrai apenas os números da entrada
+            String sonumero = escolherLinha.replaceAll("\\D", "");
 
-            while ((linha = br.readLine()) != null) {
-                if (pularCabecalho) {
-                    pularCabecalho = false;
-                    continue;
+            try {
+                int posicao = Integer.parseInt(sonumero);
+                
+                BufferedReader br = new BufferedReader(new FileReader(arquivo));
+                String linha = null;
+
+                // Lê até a linha desejada
+                for (int i = 0; i <= posicao; i++) {
+                    linha = br.readLine();
+                    if (linha == null) break; // caso o arquivo acabe antes
                 }
 
-                Show show = new Show();
-                show.ler(linha);
-                show.imprimir();
+                br.close();
+
+                if (linha != null) {
+                    Show show = new Show();
+                    show.ler(linha);
+                    show.imprimir();
+                } else {
+                    System.out.println("Linha não encontrada.");
+                }
+
+            } catch (IOException e) {
+                System.err.println("Erro ao ler o arquivo: " + e.getMessage());
+            } catch (NumberFormatException e) {
+                System.err.println("Entrada inválida. Digite algo como s123.");
             }
 
-        } catch (IOException e) {
-            System.err.println("Erro ao ler o arquivo: " + e.getMessage());
+            escolherLinha = sc.nextLine();
         }
+
+        sc.close();
     }
 }
