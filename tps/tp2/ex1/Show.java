@@ -214,9 +214,9 @@ public class Show {
         String data = (dateAdded != null) ? sdf.format(dateAdded) : "NaN";
 
         System.out.println("=> " + getShowId() + " ## " + getTitle() + " ## " + getType() + " ## " + getDirector()
-                + " ## " + Arrays.toString(getCast()) + " ## " + getCountry() + " ## " + getDateAdded()
+                + " ## " + Arrays.toString(getCast()) + " ## " + getCountry() + " ## " + data
                 + " ## " + getReleaseYear() + " ## " + getRating() + " ## " + getDuration()
-                + " ## " + Arrays.toString(getListedIn()));
+                + " ## " + Arrays.toString(getListedIn()) + " ##");
     }
 
     // --- Ler ---
@@ -259,8 +259,15 @@ public class Show {
         
         //date
         try{
-            SimpleDateFormat sdf = new SimpleDateFormat("MMM d, yyyy", Locale.ENGLISH);
-            Date data = sdf.parse(partes[i]);
+            StringBuilder datanova = new StringBuilder();
+            datanova.append(partes[i]);
+            datanova.append(", ");
+            i++;
+            datanova.append(partes[i]);
+            String dataString = datanova.toString();
+            dataString = dataString.replaceAll("\"","");
+            SimpleDateFormat sdf = new SimpleDateFormat("MMMM d, yyyy", Locale.ENGLISH);
+            Date data = sdf.parse(dataString);
             setDateAdded(data);
 
         }
@@ -269,6 +276,7 @@ public class Show {
             setDateAdded(null);
         }
         i++;
+        
 
         //releaseYear
         try {
