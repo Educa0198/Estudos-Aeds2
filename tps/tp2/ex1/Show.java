@@ -319,7 +319,7 @@ public class Show {
     }
 
     public static void main(String[] args) {
-        String arquivo = "/home/educa/Desktop/Github/Estudos-Aeds2/tps/tp2/disneyplus.csv";
+        String arquivo = "/tmp/disneyplus.csv";
         Scanner sc = new Scanner(System.in);
         String escolherLinha = sc.nextLine();
 
