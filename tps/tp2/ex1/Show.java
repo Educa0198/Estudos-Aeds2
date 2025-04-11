@@ -134,7 +134,8 @@ public class Show {
     }
 
     public void setCast(String[] cast) {
-        if (cast == null || cast.length == 0) {
+        if (cast == null || cast.length == 0 || 
+            (cast.length == 1 && cast[0].trim().isEmpty())) {
             this.cast = new String[] { "NaN" };
         } else {
             Arrays.sort(cast);
@@ -183,12 +184,14 @@ public class Show {
     }
 
     public void setListedIn(String[] listedIn) {
-        if (listedIn == null || listedIn.length == 0) {
+        if (listedIn == null || listedIn.length == 0 ||
+            (listedIn.length == 1 && listedIn[0].trim().isEmpty())) {
             this.listedIn = new String[] { "NaN" };
         } else {
             this.listedIn = listedIn;
         }
     }
+    
 
 
     // --- Clone ---
@@ -210,7 +213,7 @@ public class Show {
 
     // --- Imprimir ---
     public void imprimir() {
-        SimpleDateFormat sdf = new SimpleDateFormat("MMM d, yyyy", Locale.ENGLISH);
+        SimpleDateFormat sdf = new SimpleDateFormat("MMMM d, yyyy", Locale.ENGLISH);
         String data = (dateAdded != null) ? sdf.format(dateAdded) : "NaN";
 
         System.out.println("=> " + getShowId() + " ## " + getTitle() + " ## " + getType() + " ## " + getDirector()
@@ -222,14 +225,38 @@ public class Show {
     // --- Ler ---
     public void ler(String linha) {
         String[] partes = linha.split(",");
+        String Titulo = partes[2].replaceAll("\"", "");
         setShowId(partes[0]);
         setType(partes[1]);
-        setTitle(partes[2]);
-        setDirector(partes[3]);
+        setTitle(Titulo);
+
+        int i = 3;
+        if (partes[i].startsWith("\"")) {
+            StringBuilder director = new StringBuilder();
+            director.append(partes[i]);
+            i++;
+
+            while (i < partes.length && !partes[i].endsWith("\"")) {
+                director.append(",").append(partes[i]);
+                i++;
+            }
+            if (i < partes.length) {
+                
+                director.append(",").append(partes[i]);
+                i++;
+            }
+            String directorString = director.toString();
+            directorString = directorString.replaceAll("\"", "");
+            setDirector(directorString);
+        }
+        else 
+        {
+            setDirector(partes[i]);
+            i++;
+        }
 
         // Cast
-        int i = 4;
-        if (partes[4].startsWith("\"")) {
+        if (partes[i].startsWith("\"")) {
             StringBuilder cast = new StringBuilder();
             cast.append(partes[i]);
             i++;
@@ -251,11 +278,37 @@ public class Show {
             }
             setCast(castSeparado);
         }
-        else {i++;}
-
+        else 
+        {
+            String[] castSozinho = new String[] {partes[i].trim()};
+            setCast(castSozinho);
+            i++;
+        }
+      
         //country
-        setCountry(partes[i]);
-        i++;
+        if (partes[i].startsWith("\"")) {
+            StringBuilder country = new StringBuilder();
+            country.append(partes[i]);
+            i++;
+
+            while (i < partes.length && !partes[i].endsWith("\"")) {
+                country.append(",").append(partes[i]);
+                i++;
+            }
+            if (i < partes.length) {
+                
+                country.append(",").append(partes[i]);
+                i++;
+            }
+            String countryString = country.toString();
+            countryString = countryString.replaceAll("\"", "");
+            setCountry(countryString);
+        }
+        else 
+        {
+            setCountry(partes[i]);
+            i++;
+        }
         
         //date
         try{
@@ -319,11 +372,16 @@ public class Show {
             }
             setListedIn(ListedSeparado);
         }
+        else
+        {
+            String[] listedSozinho = new String[] {partes[i].trim()};
+            setListedIn(listedSozinho);
+        }
 
     }
 
     public static void main(String[] args) {
-        String arquivo = "/home/educa/Desktop/Github/Estudos-Aeds2/tps/tp2/disneyplus.csv";
+        String arquivo = "/tmp/disneyplus.csv";
         Scanner sc = new Scanner(System.in);
         String escolherLinha = sc.nextLine();
 
