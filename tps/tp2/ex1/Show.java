@@ -21,7 +21,6 @@ public class Show {
     private String rating;
     private String duration;
     private String[] listedIn;
-    private String description; // novo campo
 
     // Construtor padrão
     public Show() {
@@ -36,13 +35,12 @@ public class Show {
         this.rating = "NaN";
         this.duration = "NaN";
         this.listedIn = new String[] { "NaN" };
-        this.description = "NaN";
     }
 
     // Construtor completo
     public Show(String showId, String type, String title, String director, String[] cast,
             String country, Date dateAdded, int releaseYear, String rating,
-            String duration, String[] listedIn, String description) {
+            String duration, String[] listedIn) {
         this.showId = showId;
         this.type = type;
         this.title = title;
@@ -54,7 +52,7 @@ public class Show {
         this.rating = rating;
         this.duration = duration;
         this.listedIn = listedIn;
-        this.description = description;
+    
     }
 
     // --- Getters ---
@@ -102,10 +100,6 @@ public class Show {
         return listedIn;
     }
 
-    public String getDescription() {
-        return description;
-    }
-
     // --- Setters ---
     public void setShowId(String showId) {
         if (showId == null || showId.isEmpty()) {
@@ -143,6 +137,7 @@ public class Show {
         if (cast == null || cast.length == 0) {
             this.cast = new String[] { "NaN" };
         } else {
+            Arrays.sort(cast);
             this.cast = cast;
         }
     }
@@ -195,13 +190,6 @@ public class Show {
         }
     }
 
-    public void setDescription(String description) {
-        if (description == null || description.isEmpty()) {
-            this.description = "NaN";
-        } else {
-            this.description = description;
-        }
-    }
 
     // --- Clone ---
     @Override
@@ -217,8 +205,7 @@ public class Show {
                 this.releaseYear,
                 this.rating,
                 this.duration,
-                this.listedIn.clone(),
-                this.description);
+                this.listedIn.clone());
     }
 
     // --- Imprimir ---
@@ -226,10 +213,10 @@ public class Show {
         SimpleDateFormat sdf = new SimpleDateFormat("MMM d, yyyy", Locale.ENGLISH);
         String data = (dateAdded != null) ? sdf.format(dateAdded) : "NaN";
 
-        System.out.println("=> " + showId + " ## " + type + " ## " + title + " ## " + director
-                + " ## " + Arrays.toString(cast) + " ## " + country + " ## " + data
-                + " ## " + releaseYear + " ## " + rating + " ## " + duration
-                + " ## " + Arrays.toString(listedIn) + " ## " + description);
+        System.out.println("=> " + getShowId() + " ## " + getTitle() + " ## " + getType() + " ## " + getDirector()
+                + " ## " + Arrays.toString(getCast()) + " ## " + getCountry() + " ## " + getDateAdded()
+                + " ## " + getReleaseYear() + " ## " + getRating() + " ## " + getDuration()
+                + " ## " + Arrays.toString(getListedIn()));
     }
 
     // --- Ler ---
@@ -241,9 +228,9 @@ public class Show {
         setDirector(partes[3]);
 
         // Cast
+        int i = 4;
         if (partes[4].startsWith("\"")) {
             StringBuilder cast = new StringBuilder();
-            int i = 4;
             cast.append(partes[i]);
             i++;
 
@@ -251,75 +238,84 @@ public class Show {
                 cast.append(",").append(partes[i]);
                 i++;
             }
-
             if (i < partes.length) {
+                
                 cast.append(",").append(partes[i]);
                 i++;
             }
-
-            setCast(cast.toString().replace("\"", "").split(",\\s*"));
-
-            // Seguindo a ordem das colunas do CSV
-            setCountry(partes[i++]);
-            try {
-                SimpleDateFormat sdf = new SimpleDateFormat("MMM d, yyyy", Locale.ENGLISH);
-                setDateAdded(sdf.parse(partes[i++]));
-            } catch (ParseException | ArrayIndexOutOfBoundsException e) {
-                setDateAdded(null);
+            String castString = cast.toString();
+            castString = castString.replaceAll("\"", "");
+            String[] castSeparado = castString.split(",");
+            for (int j = 0; j < castSeparado.length; j++) {
+                castSeparado[j] = castSeparado[j].trim();
             }
-
-            try {
-                setReleaseYear(Integer.parseInt(partes[i++]));
-            } catch (NumberFormatException | ArrayIndexOutOfBoundsException e) {
-                setReleaseYear(-1);
-            }
-
-            setRating(i < partes.length ? partes[i++] : "NaN");
-            setDuration(i < partes.length ? partes[i++] : "NaN");
-
-            // listedIn
-            if (i < partes.length && partes[i].startsWith("\"")) {
-                StringBuilder listedInStr = new StringBuilder();
-                listedInStr.append(partes[i++]);
-                while (i < partes.length && !partes[i].endsWith("\"")) {
-                    listedInStr.append(",").append(partes[i++]);
-                }
-                if (i < partes.length) {
-                    listedInStr.append(",").append(partes[i++]);
-                }
-                setListedIn(listedInStr.toString().replace("\"", "").split(",\\s*"));
-            } else if (i < partes.length) {
-                setListedIn(partes[i++].split(",\\s*"));
-            }
-
-            // description
-            if (i < partes.length) {
-                StringBuilder desc = new StringBuilder();
-                if (partes[i].startsWith("\"")) {
-                    desc.append(partes[i++]);
-                    while (i < partes.length && !partes[i].endsWith("\"")) {
-                        desc.append(",").append(partes[i++]);
-                    }
-                    if (i < partes.length) {
-                        desc.append(",").append(partes[i++]);
-                    }
-                    setDescription(desc.toString().replace("\"", ""));
-                } else {
-                    setDescription(partes[i]);
-                }
-            } else {
-                setDescription("NaN");
-            }
-
-        } else {
-            setCast(partes[4].split(",\\s*"));
-            // Se quiser completar os outros campos mesmo quando cast não tem aspas,
-            // pode adicionar o restante aqui como no bloco acima.
+            setCast(castSeparado);
         }
+        else {i++;}
+
+        //country
+        setCountry(partes[i]);
+        i++;
+        
+        //date
+        try{
+            SimpleDateFormat sdf = new SimpleDateFormat("MMM d, yyyy", Locale.ENGLISH);
+            Date data = sdf.parse(partes[i]);
+            setDateAdded(data);
+
+        }
+        catch (ParseException e)
+        {
+            setDateAdded(null);
+        }
+        i++;
+
+        //releaseYear
+        try {
+            int anoLancamento = Integer.parseInt(partes[i]);
+            setReleaseYear(anoLancamento);
+        } catch (NumberFormatException e) {
+            setReleaseYear(-1);
+        }
+        i++;
+        
+
+        //rating
+        setRating(partes[i]);
+        i++;
+
+        //duration
+        setDuration(partes[i]);
+        i++;
+
+        //listed_in
+        if (partes[i].startsWith("\"")) {
+            StringBuilder listed = new StringBuilder();
+            listed.append(partes[i]);
+            i++;
+
+            while (i < partes.length && !partes[i].endsWith("\"")) {
+                listed.append(",").append(partes[i]);
+                i++;
+            }
+            if (i < partes.length) {
+                
+                listed.append(",").append(partes[i]);
+                i++;
+            }
+            String ListedString = listed.toString();
+            ListedString = ListedString.replaceAll("\"", "");
+            String[] ListedSeparado = ListedString.split(",");
+            for (int j = 0; j < ListedSeparado.length; j++) {
+                ListedSeparado[j] = ListedSeparado[j].trim();
+            }
+            setListedIn(ListedSeparado);
+        }
+
     }
 
     public static void main(String[] args) {
-        String arquivo = "/tmp/disneyplus.csv";
+        String arquivo = "/home/educa/Desktop/Github/Estudos-Aeds2/tps/tp2/disneyplus.csv";
         Scanner sc = new Scanner(System.in);
         String escolherLinha = sc.nextLine();
 
@@ -329,14 +325,15 @@ public class Show {
 
             try {
                 int posicao = Integer.parseInt(sonumero);
-                
+
                 BufferedReader br = new BufferedReader(new FileReader(arquivo));
                 String linha = null;
 
                 // Lê até a linha desejada
                 for (int i = 0; i <= posicao; i++) {
                     linha = br.readLine();
-                    if (linha == null) break; // caso o arquivo acabe antes
+                    if (linha == null)
+                        break; // caso o arquivo acabe antes
                 }
 
                 br.close();
