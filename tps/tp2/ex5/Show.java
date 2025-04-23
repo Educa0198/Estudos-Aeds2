@@ -50,7 +50,7 @@ public class Show {
         this.rating = rating;
         this.duration = duration;
         this.listedIn = listedIn;
-    
+
     }
 
     // --- Getters ---
@@ -132,8 +132,8 @@ public class Show {
     }
 
     public void setCast(String[] cast) {
-        if (cast == null || cast.length == 0 || 
-            (cast.length == 1 && cast[0].trim().isEmpty())) {
+        if (cast == null || cast.length == 0 ||
+                (cast.length == 1 && cast[0].trim().isEmpty())) {
             this.cast = new String[] { "NaN" };
         } else {
             Arrays.sort(cast);
@@ -183,14 +183,12 @@ public class Show {
 
     public void setListedIn(String[] listedIn) {
         if (listedIn == null || listedIn.length == 0 ||
-            (listedIn.length == 1 && listedIn[0].trim().isEmpty())) {
+                (listedIn.length == 1 && listedIn[0].trim().isEmpty())) {
             this.listedIn = new String[] { "NaN" };
         } else {
             this.listedIn = listedIn;
         }
     }
-    
-
 
     // --- Clone ---
     @Override
@@ -239,16 +237,14 @@ public class Show {
                 i++;
             }
             if (i < partes.length) {
-                
+
                 director.append(",").append(partes[i]);
                 i++;
             }
             String directorString = director.toString();
             directorString = directorString.replaceAll("\"", "");
             setDirector(directorString);
-        }
-        else 
-        {
+        } else {
             setDirector(partes[i]);
             i++;
         }
@@ -264,7 +260,7 @@ public class Show {
                 i++;
             }
             if (i < partes.length) {
-                
+
                 cast.append(",").append(partes[i]);
                 i++;
             }
@@ -275,15 +271,13 @@ public class Show {
                 castSeparado[j] = castSeparado[j].trim();
             }
             setCast(castSeparado);
-        }
-        else 
-        {
-            String[] castSozinho = new String[] {partes[i].trim()};
+        } else {
+            String[] castSozinho = new String[] { partes[i].trim() };
             setCast(castSozinho);
             i++;
         }
-      
-        //country
+
+        // country
         if (partes[i].startsWith("\"")) {
             StringBuilder country = new StringBuilder();
             country.append(partes[i]);
@@ -294,42 +288,37 @@ public class Show {
                 i++;
             }
             if (i < partes.length) {
-                
+
                 country.append(",").append(partes[i]);
                 i++;
             }
             String countryString = country.toString();
             countryString = countryString.replaceAll("\"", "");
             setCountry(countryString);
-        }
-        else 
-        {
+        } else {
             setCountry(partes[i]);
             i++;
         }
-        
-        //date
-        try{
+
+        // date
+        try {
             StringBuilder datanova = new StringBuilder();
             datanova.append(partes[i]);
             datanova.append(", ");
             i++;
             datanova.append(partes[i]);
             String dataString = datanova.toString();
-            dataString = dataString.replaceAll("\"","");
+            dataString = dataString.replaceAll("\"", "");
             SimpleDateFormat sdf = new SimpleDateFormat("MMMM d, yyyy", Locale.ENGLISH);
             Date data = sdf.parse(dataString);
             setDateAdded(data);
 
-        }
-        catch (ParseException e)
-        {
+        } catch (ParseException e) {
             setDateAdded(null);
         }
         i++;
-        
 
-        //releaseYear
+        // releaseYear
         try {
             int anoLancamento = Integer.parseInt(partes[i]);
             setReleaseYear(anoLancamento);
@@ -337,17 +326,16 @@ public class Show {
             setReleaseYear(-1);
         }
         i++;
-        
 
-        //rating
+        // rating
         setRating(partes[i]);
         i++;
 
-        //duration
+        // duration
         setDuration(partes[i]);
         i++;
 
-        //listed_in
+        // listed_in
         if (partes[i].startsWith("\"")) {
             StringBuilder listed = new StringBuilder();
             listed.append(partes[i]);
@@ -358,7 +346,7 @@ public class Show {
                 i++;
             }
             if (i < partes.length) {
-                
+
                 listed.append(",").append(partes[i]);
                 i++;
             }
@@ -369,18 +357,14 @@ public class Show {
                 ListedSeparado[j] = ListedSeparado[j].trim();
             }
             setListedIn(ListedSeparado);
-        }
-        else
-        {
-            String[] listedSozinho = new String[] {partes[i].trim()};
+        } else {
+            String[] listedSozinho = new String[] { partes[i].trim() };
             setListedIn(listedSozinho);
         }
 
-      
     }
 
-    public static void inserirArrayShow(Show add)
-    {
+    public static void inserirArrayShow(Show add) {
         lista.add(add);
     }
 
@@ -388,31 +372,45 @@ public class Show {
         for (int i = 0; i < lista.size(); i++) {
             comparacoes++;
             Show s = lista.get(i);
-            if(s.getTitle().equals(checar))
-            {
+            if (s.getTitle().equals(checar)) {
                 return "SIM";
             }
         }
         return "NAO";
     }
 
-
-    private static void criarLog()
-    {
+    private static void criarLog() {
         long tempoFinal = System.currentTimeMillis();
         long tempoTotal = tempoFinal - tempoInicial;
-        try (PrintWriter escrever =  new PrintWriter(new FileWriter("844412_sequencial.txt")))
-        {
+        try (PrintWriter escrever = new PrintWriter(new FileWriter("844412_sequencial.txt"))) {
             escrever.printf("%s\t%d\t%d%n", matricula, tempoTotal, comparacoes);
-        }
-        catch (IOException e)
-        {
+        } catch (IOException e) {
             System.err.println("falha ao criar log" + e.getMessage());
         }
     }
 
+    public static void selectionSort() {
+        int tamanho = lista.size();
+        for (int i = 0; i < tamanho - 1; i++) {
+            int indiceMenor = i;
+            for (int j = i + 1; j < tamanho; j++) {
+                comparacoes++;
+                if (lista.get(j).getTitle().compareTo(lista.get(indiceMenor).getTitle()) < 0) {
+                    indiceMenor = j;
+                }
+            }
+    
+            if (indiceMenor != i) {
+                Show temp = lista.get(i);
+                lista.set(i, lista.get(indiceMenor));
+                lista.set(indiceMenor, temp);
+            }
+        }
+    }
+    
+
     public static void main(String[] args) {
-        String arquivo = "/home/educa/Desktop/Github/Estudos-Aeds2/tps/tp2/disneyplus.csv";
+        String arquivo = "/tmp/disneyplus.csv";
         Scanner sc = new Scanner(System.in);
         String escolherLinha = sc.nextLine();
 
@@ -449,18 +447,14 @@ public class Show {
                 System.err.println("Entrada inválida. Digite algo como s123.");
             }
 
-
             escolherLinha = sc.nextLine();
         }
-        String titulo;
-        titulo = sc.nextLine();
-        System.out.println(checarTodos(titulo));
-        while(!titulo.equals("FIM"))
+        selectionSort();
+        int tamanho = lista.size();
+        for(int i =  0; i  < tamanho; i ++)
         {
-            System.out.println(checarTodos(titulo));
-            titulo = sc.nextLine();
+            lista.get(i).imprimir();
         }
-
         criarLog();
         sc.close();
     }
