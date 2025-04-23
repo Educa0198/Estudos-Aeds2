@@ -382,7 +382,7 @@ public class Show {
     private static void criarLog() {
         long tempoFinal = System.currentTimeMillis();
         long tempoTotal = tempoFinal - tempoInicial;
-        try (PrintWriter escrever = new PrintWriter(new FileWriter("844412_sequencial.txt"))) {
+        try (PrintWriter escrever = new PrintWriter(new FileWriter("844412_insercao.txt"))) {
             escrever.printf("%s\t%d\t%d%n", matricula, tempoTotal, comparacoes);
         } catch (IOException e) {
             System.err.println("falha ao criar log" + e.getMessage());
@@ -408,6 +408,28 @@ public class Show {
         }
     }
     
+    public static void insertionSort() {
+        for (int i = 1; i < lista.size(); i++) {
+            Show tmp = lista.get(i);
+            int j = i - 1;
+    
+            // Compara usando "type" como chave primária e "title" como desempate
+            while (j >= 0) {
+                comparacoes++;
+                int cmp = tmp.getType().compareTo(lista.get(j).getType());
+                if (cmp < 0 || (cmp == 0 && tmp.getTitle().compareTo(lista.get(j).getTitle()) < 0)) {
+                    lista.set(j + 1, lista.get(j));
+                    j--;
+                } else {
+                    break;
+                }
+            }
+            lista.set(j + 1, tmp);
+        }
+    }
+    
+
+
     public static void main(String[] args) {
         String arquivo = "/tmp/disneyplus.csv";
         Scanner sc = new Scanner(System.in);
@@ -448,7 +470,7 @@ public class Show {
 
             escolherLinha = sc.nextLine();
         }
-        selectionSort();
+        insertionSort();
         int tamanho = lista.size();
         for(int i =  0; i  < tamanho; i ++)
         {
