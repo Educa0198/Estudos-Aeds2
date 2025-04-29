@@ -1,7 +1,7 @@
 import java.util.*;
-import tads.common.Celula;
 
-public class Pilha extends Celula {
+
+public class Pilha  {
 
     private Celula topo;
     public Pilha()

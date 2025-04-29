@@ -1,6 +1,6 @@
-package tads.fila_flexivel;
 
-import tads.common.Celula;
+import java.util.*;
+
 
 public class fila {
     private Celula primeiro, ultimo;

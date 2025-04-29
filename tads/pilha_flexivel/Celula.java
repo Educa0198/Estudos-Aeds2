@@ -1,12 +1,15 @@
-package tads.common;
+
+import java.util.*;
 
 public class Celula {
     private int elemento;
     private Celula prox;
 
-    public Celula() {
+    public Celula()
+    {
         this(0);
     }
+
 
     public Celula(int elemento) {
         this.elemento = elemento;
@@ -28,4 +31,4 @@ public class Celula {
     public void setProx(Celula prox) {
         this.prox = prox;
     }
-} 
+}
